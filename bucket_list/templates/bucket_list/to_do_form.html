@@ -1,0 +1,28 @@
+{% extends 'bucket_list/main.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit item{% else %}New item{% endif %} · The Bucket List{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{% url 'task' %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6" />
+    </svg>
+    Back to list
+</a>
+
+<div class="card card--narrow">
+    <h2>{% if form.instance.pk %}Edit this item{% else %}Add something to your list{% endif %}</h2>
+    <p class="subtitle" style="margin-bottom: 1.5rem; color: var(--color-text-muted);">
+        {% if form.instance.pk %}Update the details or mark it complete once it is done.{% else %}What is something you want to do, see, or become?{% endif %}
+    </p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Save item</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

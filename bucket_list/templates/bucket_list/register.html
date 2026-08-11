@@ -1,0 +1,41 @@
+{% extends 'bucket_list/main.html' %}
+
+{% block title %}Create an account · The Bucket List{% endblock %}
+
+{% block content %}
+
+<div class="card card--narrow">
+    <h2 class="text-center">Start your list</h2>
+    <p class="subtitle text-center" style="color: var(--color-text-muted); margin-bottom: 1.5rem;">Create an account to keep track of everything you want to do.</p>
+    <form method="POST">
+        {% csrf_token %}
+
+        <p>
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </p>
+        <p>
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </p>
+        <p>
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </p>
+
+        <ul class="helper-list">
+            <li>At least 8 characters</li>
+            <li>Cannot be entirely numeric</li>
+            <li>Cannot be too similar to your other personal information</li>
+            <li>Cannot be a commonly used password</li>
+        </ul>
+
+        <button class="btn btn-primary btn-block" type="submit">Create account</button>
+        <p class="form-footnote">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+    </form>
+</div>
+
+{% endblock content %}
