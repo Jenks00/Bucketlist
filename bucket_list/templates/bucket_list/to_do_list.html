@@ -1,0 +1,78 @@
+{% extends 'bucket_list/main.html' %}
+
+{% block title %}Your list · The Bucket List{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <div>
+        <p class="eyebrow">Welcome back, {{ request.user|title }}</p>
+        <h1>Your bucket list</h1>
+        <p class="subtitle"><em>{{ count }}</em> thing{{ count|pluralize }} still waiting to happen</p>
+    </div>
+    <a href="{% url 'to_do-create' %}" class="btn btn-fab" aria-label="Add a new item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+        </svg>
+    </a>
+</div>
+
+<div class="toolbar">
+    <form class="search-form" action="" method="get" role="search">
+        <label class="visually-hidden" for="search-area">Search tasks</label>
+        <input id="search-area" type="text" name="search-area" placeholder="Search your list&hellip;" value="{{ search_input }}">
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </form>
+</div>
+
+{% if tasks %}
+<ul class="task-list">
+    {% for task in tasks %}
+    <li class="task-item{% if task.complete %} is-complete{% endif %}">
+        <a class="task-status" href="{% url 'to_do-update' task.id %}" aria-label="{% if task.complete %}Mark '{{ task }}' as not done{% else %}Mark '{{ task }}' as done{% endif %}">
+            {% if task.complete %}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" />
+            </svg>
+            {% endif %}
+        </a>
+        <div class="task-body">
+            <a class="task-title" href="{% url 'to_do-update' task.id %}">{{ task }}</a>
+            <ul class="task-meta">
+                {% if task.complete %}
+                <li>Completed {{ task.completed|date:"M j, Y" }}</li>
+                {% else %}
+                <li>Added {{ task.created|date:"M j, Y" }}</li>
+                {% endif %}
+            </ul>
+            {% if task.Time_required %}
+            <span class="task-time">{{ task.Time_required }}</span>
+            {% endif %}
+        </div>
+        <a class="task-delete" href="{% url 'to_do-delete' task.id %}" aria-label="Delete '{{ task }}'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-12" />
+            </svg>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<div class="card empty-state">
+    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+        <path d="M15 4v5h5" />
+        <path d="M9 13h6M9 17h4" />
+    </svg>
+    {% if search_input %}
+    <h3>No matches for &ldquo;{{ search_input }}&rdquo;</h3>
+    <p>Try a different search, or add it as something new to dream about.</p>
+    {% else %}
+    <h3>Your list is empty, for now</h3>
+    <p>Start with something you have always wanted to do.</p>
+    {% endif %}
+    <a href="{% url 'to_do-create' %}" class="btn btn-primary">Add your first item</a>
+</div>
+{% endif %}
+
+{% endblock content %}
